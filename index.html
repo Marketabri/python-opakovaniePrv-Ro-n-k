@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Opakovanie · Python 1. ročník – základná syntax</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F2F8; --surface:#FFFFFF; --ink:#171226; --ink-2:#3E3757; --muted:#5B5573;
+  --line:#DFDBEA; --line-soft:#EDEAF5;
+  --indigo:#4C3BC4; --indigo-soft:#E8E4FA;
+  --amber:#A65F0C; --amber-soft:#FBEEDA;
+  --sans:'Figtree',system-ui,sans-serif;
+  --head:'Plus Jakarta Sans','Figtree',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#100D1A; --surface:#191428; --ink:#EAE7F5; --ink-2:#BDB7D4; --muted:#8B84A8;
+    --line:#2E2745; --line-soft:#241E38;
+    --indigo:#9C8FEA; --indigo-soft:#241C4A;
+    --amber:#E0A24E; --amber-soft:#3A2A13;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#100D1A; --surface:#191428; --ink:#EAE7F5; --ink-2:#BDB7D4; --muted:#8B84A8;
+  --line:#2E2745; --line-soft:#241E38;
+  --indigo:#9C8FEA; --indigo-soft:#241C4A; --amber:#E0A24E; --amber-soft:#3A2A13;
+}
+:root[data-theme="light"]{
+  --bg:#F4F2F8; --surface:#FFFFFF; --ink:#171226; --ink-2:#3E3757; --muted:#5B5573;
+  --line:#DFDBEA; --line-soft:#EDEAF5;
+  --indigo:#4C3BC4; --indigo-soft:#E8E4FA; --amber:#A65F0C; --amber-soft:#FBEEDA;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+
+header.top{background:var(--surface);border-bottom:1px solid var(--line);padding:34px 0 26px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0}
+.eyebrow b{color:var(--indigo);font-weight:600}
+h1{font-family:var(--head);font-weight:800;font-size:clamp(1.7rem,4.4vw,2.4rem);line-height:1.08;
+  letter-spacing:-.03em;margin:.3em 0 0;text-wrap:balance}
+.lede{color:var(--ink-2);margin:.8em 0 0;max-width:72ch}
+.pts{display:flex;gap:22px;flex-wrap:wrap;margin-top:16px;padding-top:14px;
+  border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.pts b{font-family:var(--mono);color:var(--ink);font-size:1.1rem;display:block;line-height:1.2}
+
+.pokyny{background:var(--amber-soft);border:1px solid var(--amber);border-left-width:4px;
+  border-radius:10px;padding:14px 18px;margin:26px 0 30px}
+.pokyny h3{font-family:var(--head);font-size:1rem;margin:0 0 7px;color:var(--amber)}
+.pokyny ul{margin:0;padding-left:20px;color:var(--ink-2);font-size:.95rem}
+.pokyny li{margin-bottom:3px}
+.pokyny code{font-family:var(--mono);font-size:.86em;background:var(--surface);
+  padding:1px 5px;border-radius:4px}
+
+main{padding:0 0 10px}
+.cast{margin-bottom:30px;break-inside:auto}
+.cast h2{display:flex;align-items:baseline;gap:11px;font-family:var(--head);font-weight:700;
+  font-size:1.18rem;letter-spacing:-.02em;margin:0 0 14px;padding-bottom:7px;
+  border-bottom:2px solid var(--ink)}
+.mark{font-family:var(--mono);font-weight:700;font-size:1.25rem;color:var(--indigo);line-height:1}
+.rozsah{margin-left:auto;font-family:var(--mono);font-size:.74rem;font-weight:400;
+  letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+
+.ulohy{list-style:none;margin:0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.u{background:var(--surface);border:1px solid var(--line);border-radius:9px;
+  padding:10px 12px 11px;position:relative;break-inside:avoid}
+.u .n{position:absolute;top:-8px;left:10px;font-family:var(--mono);font-size:.72rem;
+  font-weight:700;color:var(--indigo);background:var(--indigo-soft);
+  border:1px solid var(--line);border-radius:100px;padding:1px 8px;line-height:1.5}
+.kod{font-family:var(--mono);font-size:.84rem;line-height:1.65;margin:7px 0 0;
+  white-space:pre;overflow-x:auto;color:var(--ink)}
+.kod i{font-style:normal}
+.kod .k{color:#C2255C;font-weight:600}
+.kod .b{color:#1668B8}
+.kod .s{color:#0B7A5C}
+.kod .c{color:#A65F0C}
+@media (prefers-color-scheme:dark){
+  .kod .k{color:#FF8FB8}.kod .b{color:#7FB4F5}.kod .s{color:#5FD3B0}.kod .c{color:#E0A24E}
+}
+:root[data-theme="dark"] .kod .k{color:#FF8FB8}
+:root[data-theme="dark"] .kod .b{color:#7FB4F5}
+:root[data-theme="dark"] .kod .s{color:#5FD3B0}
+:root[data-theme="dark"] .kod .c{color:#E0A24E}
+
+footer.end{background:var(--surface);border-top:1px solid var(--line);padding:26px 0 36px;margin-top:14px}
+footer.end h3{font-family:var(--head);font-size:1.1rem;margin:0 0 .35em}
+footer.end p{color:var(--ink-2);margin:0;max-width:70ch;font-size:.95rem}
+.odkazy{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:.92rem}
+.odkazy a{color:var(--indigo);text-decoration:none;border-bottom:1px solid transparent}
+.odkazy a:hover{border-bottom-color:var(--indigo)}
+.credit{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-top:22px}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;color:#000;font-size:10pt}
+  .wrap{max-width:none;padding:0}
+  header.top{border-bottom:1.5pt solid #000;padding:0 0 8pt}
+  h1{font-size:17pt}
+  .lede,.pts{display:none}
+  .pokyny{background:#fff;border:1pt solid #000;border-left-width:1pt;margin:10pt 0 12pt;
+    padding:7pt 10pt;border-radius:0}
+  .pokyny h3{color:#000}
+  .pokyny ul{font-size:9.5pt}
+  .pokyny code{background:#EEE}
+  .cast{margin-bottom:12pt}
+  .cast h2{font-size:12pt;border-bottom:1pt solid #000;margin-bottom:8pt}
+  .mark{color:#000}
+  .ulohy{grid-template-columns:repeat(3,1fr);gap:7pt}
+  .u{border:0.75pt solid #999;border-radius:0;padding:6pt 7pt}
+  .u .n{background:#fff;border:0.75pt solid #000;color:#000;font-size:7.5pt;top:-6pt}
+  .kod{font-size:8.5pt;line-height:1.5;color:#000}
+  .kod .k,.kod .b,.kod .s,.kod .c{color:#000}
+  .kod .k{font-weight:700}
+  footer.end,.odkazy{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Python · 1. ročník · <b>Opakovanie</b></p>
+    <h1>Opakovanie základnej syntaxe Pythonu</h1>
+    <p class="lede">50 krátkych príkladov zo všetkého, čo sa doteraz prebralo – operátory, premenné a dátové typy, reťazce, podmienky, cykly, funkcie a zoznamy. Pri každom príklade je úlohou povedať, čo program vypíše. Každá odpoveď je jedno číslo alebo jedno slovo.</p>
+    <div class="pts">
+      <div><b>50</b> príkladov</div>
+      <div><b>6</b> častí A – F</div>
+      <div><b>50</b> bodov spolu</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="pokyny">
+    <h3>Ako sa test píše</h3>
+    <ul>
+      <li>Do zošita sa píše <b>iba číslo príkladu a odpoveď</b> – nič viac. Napríklad <code>1. 13</code>.</li>
+      <li>Každá odpoveď je jedno číslo alebo jedno slovo. Ak by vyšlo viac riadkov, príklad je zle prečítaný.</li>
+      <li>Desatinné miesta sa oddeľujú bodkou: <code>2.5</code>. Rozdiel medzi <code>2</code> a <code>2.0</code> sa počíta.</li>
+      <li>Hodnoty <code>True</code> a <code>False</code> sa píšu tak, ako ich vypíše Python – s veľkým začiatočným písmenom.</li>
+      <li>Pri reťazcoch sa píše iba samotný text, bez úvodzoviek. Veľké a malé písmená sa počítajú.</li>
+      <li>Ak je príklad neriešiteľný alebo by program skončil chybou, odpoveď je slovo <code>chyba</code>.</li>
+    </ul>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="cast">
+    <h2><span class="mark">A</span>Čísla a operátory<span class="rozsah">1 – 10</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">1</span><pre class="kod"><i class="b">print</i>(<i class="c">7</i> + <i class="c">3</i> * <i class="c">2</i>)</pre></li>
+      <li class="u"><span class="n">2</span><pre class="kod"><i class="b">print</i>((<i class="c">7</i> + <i class="c">3</i>) * <i class="c">2</i>)</pre></li>
+      <li class="u"><span class="n">3</span><pre class="kod"><i class="b">print</i>(<i class="c">17</i> // <i class="c">5</i>)</pre></li>
+      <li class="u"><span class="n">4</span><pre class="kod"><i class="b">print</i>(<i class="c">17</i> % <i class="c">5</i>)</pre></li>
+      <li class="u"><span class="n">5</span><pre class="kod"><i class="b">print</i>(<i class="c">2</i> ** <i class="c">5</i>)</pre></li>
+      <li class="u"><span class="n">6</span><pre class="kod"><i class="b">print</i>(<i class="c">10</i> / <i class="c">4</i>)</pre></li>
+      <li class="u"><span class="n">7</span><pre class="kod"><i class="b">print</i>(-<i class="c">7</i> // <i class="c">2</i>)</pre></li>
+      <li class="u"><span class="n">8</span><pre class="kod"><i class="b">print</i>(<i class="b">abs</i>(-<i class="c">9</i>))</pre></li>
+      <li class="u"><span class="n">9</span><pre class="kod"><i class="b">print</i>(<i class="b">round</i>(<i class="c">3.567</i>, <i class="c">1</i>))</pre></li>
+      <li class="u"><span class="n">10</span><pre class="kod"><i class="b">print</i>(<i class="b">int</i>(<i class="c">7.9</i>))</pre></li>
+    </ol>
+  </section>
+
+  <section class="cast">
+    <h2><span class="mark">B</span>Premenné a dátové typy<span class="rozsah">11 – 18</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">11</span><pre class="kod">a = <i class="c">5</i>
+a = a + <i class="c">3</i>
+<i class="b">print</i>(a)</pre></li>
+      <li class="u"><span class="n">12</span><pre class="kod">x = <i class="c">4</i>
+x += <i class="c">6</i>
+<i class="b">print</i>(x)</pre></li>
+      <li class="u"><span class="n">13</span><pre class="kod"><i class="b">print</i>(<i class="b">int</i>(<i class="s">"12"</i>) + <i class="c">1</i>)</pre></li>
+      <li class="u"><span class="n">14</span><pre class="kod"><i class="b">print</i>(<i class="b">float</i>(<i class="s">"2.5"</i>) * <i class="c">2</i>)</pre></li>
+      <li class="u"><span class="n">15</span><pre class="kod"><i class="b">print</i>(<i class="b">str</i>(<i class="c">7</i>) + <i class="s">"7"</i>)</pre></li>
+      <li class="u"><span class="n">16</span><pre class="kod"><i class="b">print</i>(<i class="b">type</i>(<i class="c">5</i>) == <i class="b">int</i>)</pre></li>
+      <li class="u"><span class="n">17</span><pre class="kod"><i class="b">print</i>(<i class="b">bool</i>(<i class="c">0</i>))</pre></li>
+      <li class="u"><span class="n">18</span><pre class="kod"><i class="b">print</i>(<i class="b">int</i>(<i class="c">3.99</i>) + <i class="b">int</i>(<i class="s">"2"</i>))</pre></li>
+    </ol>
+  </section>
+
+  <section class="cast">
+    <h2><span class="mark">C</span>Reťazce<span class="rozsah">19 – 27</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">19</span><pre class="kod"><i class="b">print</i>(<i class="b">len</i>(<i class="s">"informatika"</i>))</pre></li>
+      <li class="u"><span class="n">20</span><pre class="kod">s = <i class="s">"Python"</i>
+<i class="b">print</i>(s[<i class="c">0</i>])</pre></li>
+      <li class="u"><span class="n">21</span><pre class="kod">s = <i class="s">"Python"</i>
+<i class="b">print</i>(s[-<i class="c">1</i>])</pre></li>
+      <li class="u"><span class="n">22</span><pre class="kod">s = <i class="s">"Python"</i>
+<i class="b">print</i>(s[<i class="c">1</i>:<i class="c">4</i>])</pre></li>
+      <li class="u"><span class="n">23</span><pre class="kod"><i class="b">print</i>(<i class="s">"ab"</i> * <i class="c">3</i>)</pre></li>
+      <li class="u"><span class="n">24</span><pre class="kod"><i class="b">print</i>(<i class="s">"python"</i>.<i class="b">upper</i>())</pre></li>
+      <li class="u"><span class="n">25</span><pre class="kod"><i class="b">print</i>(<i class="s">"  ahoj  "</i>.<i class="b">strip</i>())</pre></li>
+      <li class="u"><span class="n">26</span><pre class="kod"><i class="b">print</i>(<i class="s">"banana"</i>.<i class="b">count</i>(<i class="s">"a"</i>))</pre></li>
+      <li class="u"><span class="n">27</span><pre class="kod"><i class="b">print</i>(<i class="s">"nan"</i> <i class="k">in</i> <i class="s">"banany"</i>)</pre></li>
+    </ol>
+  </section>
+
+  <section class="cast">
+    <h2><span class="mark">D</span>Podmienky a logické výrazy<span class="rozsah">28 – 35</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">28</span><pre class="kod"><i class="b">print</i>(<i class="c">5</i> &gt; <i class="c">3</i>)</pre></li>
+      <li class="u"><span class="n">29</span><pre class="kod"><i class="b">print</i>(<i class="c">5</i> == <i class="s">"5"</i>)</pre></li>
+      <li class="u"><span class="n">30</span><pre class="kod"><i class="b">print</i>(<i class="k">not</i> <i class="k">True</i>)</pre></li>
+      <li class="u"><span class="n">31</span><pre class="kod"><i class="b">print</i>(<i class="k">True</i> <i class="k">and</i> <i class="k">False</i>)</pre></li>
+      <li class="u"><span class="n">32</span><pre class="kod"><i class="b">print</i>(<i class="c">4</i> &gt;= <i class="c">4</i> <i class="k">or</i> <i class="c">2</i> &gt; <i class="c">9</i>)</pre></li>
+      <li class="u"><span class="n">33</span><pre class="kod"><i class="b">print</i>(<i class="c">10</i> % <i class="c">3</i> == <i class="c">1</i>)</pre></li>
+      <li class="u"><span class="n">34</span><pre class="kod">x = <i class="c">7</i>
+<i class="k">if</i> x % <i class="c">2</i> == <i class="c">0</i>:
+    <i class="b">print</i>(<i class="s">"sude"</i>)
+<i class="k">else</i>:
+    <i class="b">print</i>(<i class="s">"nesude"</i>)</pre></li>
+      <li class="u"><span class="n">35</span><pre class="kod">x = <i class="c">10</i>
+<i class="b">print</i>(<i class="s">"velke"</i> <i class="k">if</i> x &gt; <i class="c">5</i> <i class="k">else</i> <i class="s">"male"</i>)</pre></li>
+    </ol>
+  </section>
+
+  <section class="cast">
+    <h2><span class="mark">E</span>Cykly<span class="rozsah">36 – 44</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">36</span><pre class="kod">s = <i class="c">0</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">5</i>):
+    s = s + i
+<i class="b">print</i>(s)</pre></li>
+      <li class="u"><span class="n">37</span><pre class="kod">p = <i class="c">1</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">1</i>, <i class="c">5</i>):
+    p = p * i
+<i class="b">print</i>(p)</pre></li>
+      <li class="u"><span class="n">38</span><pre class="kod">n = <i class="c">0</i>
+<i class="k">for</i> z <i class="k">in</i> <i class="s">"Python"</i>:
+    n = n + <i class="c">1</i>
+<i class="b">print</i>(n)</pre></li>
+      <li class="u"><span class="n">39</span><pre class="kod">i = <i class="c">0</i>
+<i class="k">while</i> i &lt; <i class="c">10</i>:
+    i = i + <i class="c">3</i>
+<i class="b">print</i>(i)</pre></li>
+      <li class="u"><span class="n">40</span><pre class="kod">s = <i class="c">0</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">0</i>, <i class="c">10</i>, <i class="c">2</i>):
+    s = s + <i class="c">1</i>
+<i class="b">print</i>(s)</pre></li>
+      <li class="u"><span class="n">41</span><pre class="kod">s = <i class="c">0</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">5</i>):
+    <i class="k">if</i> i == <i class="c">3</i>:
+        <i class="k">break</i>
+    s = s + <i class="c">1</i>
+<i class="b">print</i>(s)</pre></li>
+      <li class="u"><span class="n">42</span><pre class="kod">s = <i class="c">0</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">5</i>):
+    <i class="k">if</i> i == <i class="c">2</i>:
+        <i class="k">continue</i>
+    s = s + i
+<i class="b">print</i>(s)</pre></li>
+      <li class="u"><span class="n">43</span><pre class="kod"><i class="b">print</i>(<i class="b">sum</i>(<i class="b">range</i>(<i class="c">1</i>, <i class="c">11</i>)))</pre></li>
+      <li class="u"><span class="n">44</span><pre class="kod">pocet = <i class="c">0</i>
+<i class="k">for</i> i <i class="k">in</i> <i class="b">range</i>(<i class="c">1</i>, <i class="c">21</i>):
+    <i class="k">if</i> i % <i class="c">5</i> == <i class="c">0</i>:
+        pocet = pocet + <i class="c">1</i>
+<i class="b">print</i>(pocet)</pre></li>
+    </ol>
+  </section>
+
+  <section class="cast">
+    <h2><span class="mark">F</span>Funkcie a zoznamy<span class="rozsah">45 – 50</span></h2>
+    <ol class="ulohy">
+      <li class="u"><span class="n">45</span><pre class="kod"><i class="k">def</i> dvojnasobok(x):
+    <i class="k">return</i> x * <i class="c">2</i>
+
+<i class="b">print</i>(dvojnasobok(<i class="c">6</i>))</pre></li>
+      <li class="u"><span class="n">46</span><pre class="kod"><i class="k">def</i> spolu(a, b=<i class="c">3</i>):
+    <i class="k">return</i> a + b
+
+<i class="b">print</i>(spolu(<i class="c">4</i>))</pre></li>
+      <li class="u"><span class="n">47</span><pre class="kod">cisla = [<i class="c">3</i>, <i class="c">1</i>, <i class="c">2</i>]
+<i class="b">print</i>(<i class="b">len</i>(cisla))</pre></li>
+      <li class="u"><span class="n">48</span><pre class="kod">cisla = [<i class="c">3</i>, <i class="c">1</i>, <i class="c">2</i>]
+<i class="b">print</i>(<i class="b">max</i>(cisla))</pre></li>
+      <li class="u"><span class="n">49</span><pre class="kod">cisla = [<i class="c">3</i>, <i class="c">1</i>, <i class="c">2</i>]
+cisla.<i class="b">append</i>(<i class="c">9</i>)
+<i class="b">print</i>(<i class="b">len</i>(cisla))</pre></li>
+      <li class="u"><span class="n">50</span><pre class="kod">cisla = [<i class="c">10</i>, <i class="c">20</i>, <i class="c">30</i>]
+<i class="b">print</i>(cisla[<i class="c">1</i>])</pre></li>
+    </ol>
+  </section>
+</main>
+
+<footer class="end">
+  <div class="wrap">
+    <h3>Na čo si dať pozor</h3>
+    <p>Najčastejšie chyby sú zámena <code>/</code> a <code>//</code>, výsledok delenia zapísaný bez desatinnej časti a nesprávne spočítaný počet opakovaní cyklu <code>range</code>. Pri odpovedi sa oplatí program prejsť riadok po riadku a zapisovať si hodnoty premenných.</p>
+    <div class="odkazy">
+      <a href="../index.html">← Python</a>
+      <a href="../python1/04_cykly/precvicovanie.html">Precvičovanie cyklov</a>
+      <a href="../python1/test-opakovanie-1.html">Opakovanie 1 (interaktívne)</a>
+      <a href="../python1/test-opakovanie-2.html">Opakovanie 2 (interaktívne)</a>
+    </div>
+    <p class="credit">Spojená škola Nižná · Programovanie</p>
+  </div>
+</footer>
+
+</body>
+</html>
